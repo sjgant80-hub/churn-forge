@@ -1,0 +1,25 @@
+{
+  "build": "churn-forge",
+  "what": "Point the pattern forge at a REAL company dataset: 7,043 real telecom customers (IBM Telco Customer Churn, frozen + sha-pinned). It finds the patterns that predict churn on held-out customers it never saw, reports honestly where breeding does NOT help, and mints the result as an owned model — all re-runnable.",
+  "sealed_before_measurement": true,
+  "claims": [
+    { "id": "P1", "text": "The forge finds a churn pattern that GENERALISES on held-out real customers, well above balanced chance (0.5)", "check": "bestTestBA >= 0.7" },
+    { "id": "P2", "text": "The strongest driver is a real, nameable one — a month-to-month contract", "check": "bestFeature === 'contractMonthly'" },
+    { "id": "P3", "text": "Several patterns clear the held-out bar on real data", "check": "survivors >= 3" },
+    { "id": "P4", "text": "HONEST: on this real data breeding did NOT beat the single best pattern — reported, not overclaimed", "check": "breedImproved === false && breedChampionTerms === 1" },
+    { "id": "P5", "text": "The classifier mints as a tiny OWNED model (certified beats chance) and owning beats renting", "check": "mintMinted === true && mintBytes > 0 && mintBytes < 40 && mintFingerprintOk === true && mintEconVerdict === 'OWN_WINS'" }
+  ],
+  "expected": {
+    "cases": 7043,
+    "churnRate": 0.265,
+    "bestFeature": "contractMonthly",
+    "bestTestBA": 0.726,
+    "survivors": 4,
+    "breedImproved": false,
+    "breedChampionTerms": 1,
+    "mintMinted": true,
+    "mintBytes": 20,
+    "mintFingerprintOk": true,
+    "mintEconVerdict": "OWN_WINS"
+  }
+}
