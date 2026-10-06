@@ -1,0 +1,24 @@
+# churn-forge
+
+> The sovereign pattern forge run on a REAL company dataset: 7,043 real telecom customers
+> (IBM Telco Customer Churn, frozen + sha256-sealed). It keeps only churn patterns that
+> predict held-out customers it never saw, reports honestly where breeding does NOT help,
+> and mints the winner as a tiny owned model. The re-runnable alternative to RAG-on-your-CSV.
+
+## What it proves (sealed in predictions.json before measurement)
+- A churn pattern GENERALISES on held-out real customers: held-out balanced accuracy 0.726 (coin-flip = 0.5).
+- The strongest driver is a real, nameable one: a month-to-month contract.
+- 4 patterns clear the held-out bar on customers the forge never saw.
+- HONEST: breeding compound rules did NOT beat the single best pattern here — reported, not overclaimed.
+- The classifier mints as a 20-byte OWNED model (certified beats chance); owning beats renting an LLM (OWN_WINS).
+
+## Proof-of-play
+- load.mjs is mutation-witnessed (score 1.0) and fuzzed never-throw.
+- data/telco-churn.csv is frozen and sha256-sealed; CI verifies the exact bytes each run.
+- ci-verify.mjs re-derives every sealed fact from the real data on GitHub's runner; the live page runs the identical kernels and self-checks the same claims.
+- Forge/breed/mint kernels vendored + pinned from pattern-forge and fallforgemint (see VENDOR.md).
+
+## Links
+- Live: https://sjgant80-hub.github.io/churn-forge/
+- Source: https://github.com/sjgant80-hub/churn-forge
+- Built on: https://sjgant80-hub.github.io/pattern-forge/
