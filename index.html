@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Churn Forge</title>
+<meta name="description" content="Point the sovereign pattern forge at a REAL company dataset — 7,043 real telecom customers (IBM Telco Customer Churn). It finds the churn patterns that generalise to customers it never saw, reports honestly where breeding does NOT help, and mints the result as a tiny owned model. Re-derived live in your browser from the gated kernel." />
+<link rel="canonical" href="https://sjgant80-hub.github.io/churn-forge/" />
+<script type="application/ld+json">
+{ "@context":"https://schema.org","@type":"SoftwareSourceCode","name":"churn-forge",
+  "description":"The sovereign pattern forge run on a real company dataset (IBM Telco Customer Churn, 7,043 customers): it keeps only churn patterns that predict held-out customers, reports where breeding does not help, and mints a tiny owned model — the alternative to renting an LLM to read your churn data.",
+  "programmingLanguage":"JavaScript","codeRepository":"https://github.com/sjgant80-hub/churn-forge",
+  "url":"https://sjgant80-hub.github.io/churn-forge/","isBasedOn":"https://sjgant80-hub.github.io/pattern-forge/",
+  "author":{"@type":"Person","name":"Kar (AI-Native Solutions, sjgant80-hub)"} }
+</script>
+<style>
+  :root { --bg:#f6f7fb; --panel:#fff; --ink:#141720; --muted:#5a6373; --line:#e3e7ef;
+    --accent:#3b5bdb; --accent-soft:#eaefff; --good:#1a7f4b; --good-soft:#e5f6ec; --bad:#c0392b; --bad-soft:#fdecea; --warn:#b4530a; --warn-soft:#fbf0e2;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace; --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; color-scheme:light; }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){ --bg:#0f1118; --panel:#161a24; --ink:#e8ebf2; --muted:#9aa3b4;
+    --line:#262c3a; --accent:#8aa0ff; --accent-soft:#1b2340; --good:#4cc98a; --good-soft:#10281c; --bad:#ff8a7a; --bad-soft:#2a1512; --warn:#e0923f; --warn-soft:#2a2112; color-scheme:dark; } }
+  :root[data-theme="dark"]{ --bg:#0f1118; --panel:#161a24; --ink:#e8ebf2; --muted:#9aa3b4; --line:#262c3a; --accent:#8aa0ff;
+    --accent-soft:#1b2340; --good:#4cc98a; --good-soft:#10281c; --bad:#ff8a7a; --bad-soft:#2a1512; --warn:#e0923f; --warn-soft:#2a2112; color-scheme:dark; }
+  *{box-sizing:border-box;} body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;}
+  .wrap{max-width:900px;margin:0 auto;padding:24px 16px 72px;}
+  .kicker{font:600 12px/1.4 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 10px;}
+  h1{font-size:clamp(26px,5vw,40px);line-height:1.08;margin:0 0 12px;text-wrap:balance;letter-spacing:-.02em;}
+  .lede{font-size:clamp(16px,2.4vw,19px);color:var(--muted);margin:0 0 8px;max-width:64ch;} a{color:var(--accent);}
+  .selfcheck{display:flex;align-items:center;gap:10px;margin:20px 0;padding:12px 16px;border:1px solid var(--line);border-radius:12px;background:var(--good-soft);font:600 14px/1.4 var(--sans);}
+  .selfcheck .dot{width:10px;height:10px;border-radius:50%;background:var(--good);flex:none;} .selfcheck.bad{background:var(--bad-soft);} .selfcheck.bad .dot{background:var(--bad);}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:20px 0;}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;}
+  .stat .v{font:700 26px/1 var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.02em;} .stat .l{color:var(--muted);font-size:12.5px;margin-top:6px;}
+  section{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;margin:20px 0;} h2{font-size:20px;margin:0 0 6px;letter-spacing:-.01em;} .sub{color:var(--muted);font-size:14px;margin:0 0 16px;}
+  table{border-collapse:collapse;width:100%;font-size:14px;} th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);} th{color:var(--muted);font-size:12.5px;text-transform:uppercase;letter-spacing:.05em;}
+  td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;} .tag{font:600 11px var(--mono);padding:3px 8px;border-radius:999px;} .tag.keep{background:var(--good-soft);color:var(--good);} .tag.drop{background:var(--bad-soft);color:var(--bad);}
+  .bar{height:8px;border-radius:4px;background:var(--accent);display:inline-block;vertical-align:middle;}
+  .claims li{margin:7px 0;} .claims .ok{color:var(--good);font-weight:700;font-family:var(--mono);}
+  .note{font-size:13.5px;color:var(--muted);border-left:3px solid var(--line);padding-left:14px;} code{font-family:var(--mono);font-size:.92em;background:var(--accent-soft);padding:1px 5px;border-radius:5px;}
+  .honest{background:var(--warn-soft);border:1px solid var(--warn);border-radius:12px;padding:14px 16px;font-size:14px;}
+  .rrow{display:grid;grid-template-columns:1.7fr 3fr auto;gap:10px;align-items:center;margin:6px 0;}
+  footer{color:var(--muted);font-size:13px;margin-top:28px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="kicker">Pattern organs · real company data · sovereign</p>
+  <h1>Point the forge at a real churn dataset</h1>
+  <p class="lede">This is the sovereign pattern forge run on <strong>7,043 real telecom customers</strong> (IBM's public Telco Customer Churn set). It proposes simple churn patterns from a training split, keeps <strong>only</strong> the ones that still predict a <strong>held-out</strong> split of customers it never saw, breeds compound rules, and mints the winner as a tiny owned model. The alternative to renting an LLM to read your churn data — re-derived live in your browser from the gated kernel.</p>
+
+  <div class="selfcheck" id="selfcheck"><span class="dot"></span><span id="sc">Loading the real data and re-deriving from the kernel…</span></div>
+
+  <div class="stats" id="stats"></div>
+
+  <section>
+    <h2>The patterns that actually predict churn</h2>
+    <p class="sub">Every pattern the forge proposed, graded on the held-out third of customers (balanced accuracy — never an LLM judge). <span class="tag keep">keep</span> = beat the bar and generalised; <span class="tag drop">drop</span> = failed on customers it never saw.</p>
+    <table id="patterns"><thead><tr><th>pattern</th><th>train BA</th><th>held-out BA</th><th>verdict</th></tr></thead><tbody></tbody></table>
+    <p class="sub" id="patterns-summary" style="margin-top:12px"></p>
+  </section>
+
+  <section>
+    <h2>Does breeding compound rules help here?</h2>
+    <p class="sub">Breeding ANDs patterns together across generations — selecting on train, judged on held-out. On this real data we report what actually happened, not what we hoped.</p>
+    <div id="breed"></div>
+    <div class="honest" id="honest" style="margin-top:14px"></div>
+  </section>
+
+  <section>
+    <h2>Mint it — own the churn model</h2>
+    <p class="sub">The validated classifier is a tiny, owned model. Minting is gated by <a href="https://sjgant80-hub.github.io/fallforgemint/">fallforgemint</a>'s own rule — a node mints only on a certified BEATS-the-base receipt — and the economics are its own own-vs-rent calculator, costed against renting an LLM to score every customer.</p>
+    <div id="mint"></div>
+  </section>
+
+  <section>
+    <h2>The sealed claims</h2>
+    <p class="sub">Pre-registered in <code>predictions.json</code> before measurement; checked live against the kernel on the real data now. The same checks run on GitHub's own runner in CI.</p>
+    <ul class="claims" id="claims"></ul>
+  </section>
+
+  <section>
+    <h2>How this replaces RAG-on-your-CSV</h2>
+    <p class="note">The usual way to "ask AI about your churn" is to embed every row and rent an LLM to read them back — a per-call bill, your customer data leaving the building, and an answer you cannot re-check. The forge does the opposite: it finds the handful of rules that genuinely predict churn on held-out customers, proves each one survives data it never saw, and hands you a <strong>tiny owned model</strong> (20 bytes here) you run yourself for nothing. Bring your own CSV (same 21-column shape) and the same pipeline runs on it.</p>
+  </section>
+
+  <footer>Data: IBM sample <em>Telco Customer Churn</em> (<code>data/telco-churn.csv</code>, frozen + sha-pinned). Kernel: <code>pattern.mjs</code> / <code>breed.mjs</code> / <code>mint.mjs</code>, vendored from <a href="https://sjgant80-hub.github.io/pattern-forge/">pattern-forge</a> — mutation-witnessed (score 1.0), fuzz-gated, sealed. Source: <a href="https://github.com/sjgant80-hub/churn-forge">github.com/sjgant80-hub/churn-forge</a>. Built by Kar · AI-Native Solutions.</footer>
+</div>
+
+<script type="module">
+  import { loadChurn, churnRate, FEATURES } from './load.mjs';
+  import { forge } from './vendor/pattern-forge/pattern.mjs';
+  import { breed } from './vendor/pattern-forge/breed.mjs';
+  import { mint, verifyMint, economics } from './vendor/pattern-forge/mint.mjs';
+
+  const r3 = (x) => Math.round(x * 1000) / 1000;
+  const bad = (msg) => { const sc = document.getElementById('selfcheck'); sc.classList.add('bad'); document.getElementById('sc').textContent = msg; };
+
+  // plain-English name for a stump on one of the six churn features
+  const human = (s) => {
+    const dir = s.dir === -1 ? '≤' : '≥', t = s.threshold;
+    if (s.feature === 4) return s.dir === 1 ? 'on a month-to-month contract' : 'not month-to-month';
+    if (s.feature === 3) return s.dir === 1 ? 'a senior citizen' : 'not a senior citizen';
+    if (s.feature === 5) return s.dir === 1 ? 'has fibre-optic internet' : 'no fibre-optic internet';
+    const unit = s.feature === 0 ? ' months' : '';
+    return `${FEATURES[s.feature]} ${dir} ${t}${unit}`;
+  };
+  const ba = (v) => `<span class="bar" style="width:${Math.round(v * 70)}px"></span> <span class="n">${v.toFixed(3)}</span>`;
+
+  let m = null, csvOk = false;
+  try {
+    const csv = await fetch('./data/telco-churn.csv').then((r) => { if (!r.ok) throw new Error('csv ' + r.status); return r.text(); });
+    const cases = loadChurn(csv);
+    if (cases.length < 5000) throw new Error('too few cases parsed: ' + cases.length);
+    csvOk = true;
+
+    const r = forge(cases, { holdoutFrac: 1 / 3, bar: 0.6 });
+    const ranked = r.proposed.slice().sort((a, b) => b.testBA - a.testBA);
+    const best = ranked[0];
+    const b = breed(cases, { generations: 3, keep: 8, maxTerms: 3 });
+    const mm = mint({ kind: 'stump', feature: best.feature, threshold: best.threshold, dir: best.dir }, best.testBA, 0.5);
+    const econ = economics({ callsPerMonth: 100000, tokensPerCall: 60, rentPerMillion: 3, setupCost: 0, runPerMonth: 0 });
+
+    // headline stats
+    document.getElementById('stats').innerHTML = [
+      [cases.length.toLocaleString(), 'real customers'],
+      [(churnRate(cases) * 100).toFixed(1) + '%', 'actually churned'],
+      [r.survivors.length, 'patterns that generalise'],
+      [best.testBA.toFixed(3), 'best held-out accuracy'],
+    ].map(([v, l]) => `<div class="stat"><div class="v">${v}</div><div class="l">${l}</div></div>`).join('');
+
+    // the patterns table
+    document.querySelector('#patterns tbody').innerHTML = ranked.map((s) => {
+      const keep = s.testBA >= r.bar;
+      return `<tr><td>${human(s)}</td><td class="n">${s.trainBA.toFixed(3)}</td><td>${ba(s.testBA)}</td><td><span class="tag ${keep ? 'keep' : 'drop'}">${keep ? 'keep' : 'drop'}</span></td></tr>`;
+    }).join('');
+    document.getElementById('patterns-summary').innerHTML =
+      `The strongest real driver is being <strong>${human(best)}</strong> — held-out balanced accuracy ${best.testBA.toFixed(3)}, well above the 0.5 coin-flip. ${r.survivors.length} patterns cleared the bar on customers the forge never saw; the rest were dropped for failing to generalise.`;
+
+    // breeding — honest
+    const champStr = b.champion ? b.champion.stumps.map(human).join(' AND ') : '—';
+    document.getElementById('breed').innerHTML = `
+      <div class="rrow"><span>best single pattern</span><span class="bar" style="width:${b.singleBestTestBA * 100}%"></span><span class="n">held-out ${b.singleBestTestBA.toFixed(3)}</span></div>
+      <div class="rrow"><span>bred compound champion</span><span class="bar" style="width:${b.champion.testBA * 100}%;background:${b.improvedHeldOut ? 'var(--good)' : 'var(--muted)'}"></span><span class="n">held-out ${b.champion.testBA.toFixed(3)}</span></div>`;
+    document.getElementById('honest').innerHTML = b.improvedHeldOut
+      ? `<strong>Breeding improved it.</strong> The compound rule <code>${champStr}</code> (${b.champion.terms} terms) beat every single pattern on held-out customers.`
+      : `<strong>Honest result: breeding did NOT help here.</strong> The best compound the breeder could find was a single term — <code>${champStr}</code> at held-out ${b.champion.testBA.toFixed(3)} — no better than the best single pattern. On this dataset one clear rule already captures the signal; we report that rather than overclaim a fancier model.`;
+
+    // mint
+    document.getElementById('mint').innerHTML = `
+      <div style="margin-bottom:10px"><b>the owned churn model</b><p style="color:var(--ink);margin:6px 0 0"><code>${mm.body}</code> — ${mm.bytes} bytes, runs locally on every customer for nothing, no data leaves the building. Fingerprint <code>${mm.fingerprint}</code> ${verifyMint(mm) ? '✓ verifies' : '✗ FAILS'}.</p></div>
+      <div class="rrow"><span>mint verdict</span><span class="bar" style="width:${mm.minted ? 100 : 5}%;background:${mm.minted ? 'var(--good)' : 'var(--bad)'}"></span><span class="n">${mm.minted ? 'MINTED' : 'not minted'} · beats base ${mm.receipt.base.toFixed(3)}→${mm.receipt.candidate.toFixed(3)}</span></div>
+      <div class="rrow"><span>own vs rent an LLM</span><span class="bar" style="width:100%;background:var(--good)"></span><span class="n">${econ.verdict}</span></div>`;
+
+    m = {
+      cases: cases.length,
+      churnRate: churnRate(cases),
+      bestFeature: FEATURES[best.feature],
+      bestTestBA: r3(best.testBA),
+      survivors: r.survivors.length,
+      breedImproved: b.improvedHeldOut,
+      breedChampionTerms: b.champion ? b.champion.terms : 0,
+      mintMinted: mm.minted === true,
+      mintBytes: mm.bytes,
+      mintFingerprintOk: verifyMint(mm),
+      mintEconVerdict: econ.verdict,
+    };
+  } catch (e) {
+    bad('Could not load the real data in this context (' + e.message + '). Open via the live site or a local server so the CSV can be fetched.');
+  }
+
+  // sealed claims + self-check — only when the real data loaded
+  if (m) {
+    let allPass = true;
+    try {
+      const preds = await fetch('./predictions.json').then((r) => r.json());
+      const holds = (expr) => { const { cases, churnRate, bestFeature, bestTestBA, survivors, breedImproved, breedChampionTerms, mintMinted, mintBytes, mintFingerprintOk, mintEconVerdict } = m; try { return !!eval(expr); } catch { return false; } };
+      document.getElementById('claims').innerHTML = preds.claims.map((c) => {
+        const p = holds(c.check); if (!p) allPass = false;
+        return `<li><span class="ok">${p ? '✓' : '✗'}</span> ${c.text} <code>${c.check}</code></li>`;
+      }).join('');
+    } catch { document.getElementById('claims').innerHTML = '<li class="note">predictions.json not reachable here — the tables above are still live from the kernel.</li>'; allPass = false; }
+
+    const ok = csvOk && m.cases === 7043 && m.bestFeature === 'contractMonthly' && m.bestTestBA >= 0.7
+      && m.survivors >= 3 && m.breedImproved === false && m.breedChampionTerms === 1
+      && m.mintMinted === true && m.mintBytes > 0 && m.mintBytes < 40 && m.mintFingerprintOk === true && m.mintEconVerdict === 'OWN_WINS' && allPass;
+    const sc = document.getElementById('selfcheck');
+    document.getElementById('sc').innerHTML = ok
+      ? `Self-check ✓ — re-derived live on ${m.cases.toLocaleString()} real customers: the strongest churn driver (${m.bestFeature}) predicts held-out customers at ${m.bestTestBA}, ${m.survivors} patterns generalised, breeding honestly did NOT beat the single best pattern, and the classifier minted as a ${m.mintBytes}-byte owned model (${m.mintEconVerdict}).`
+      : 'Self-check mismatch — do not trust this build.';
+    if (!ok) sc.classList.add('bad');
+  }
+</script>
+</body>
+</html>

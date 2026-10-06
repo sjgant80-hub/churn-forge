@@ -1,0 +1,8 @@
+{
+  "name": "churn-forge",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "description": "The pattern forge pointed at a real company dataset (IBM Telco Customer Churn): find the churn patterns that generalise on held-out customers, mint the owned model. Kernel-backed, witnessed, sealed.",
+  "scripts": { "test": "node --test load.test.mjs" }
+}
