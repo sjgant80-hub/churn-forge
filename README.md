@@ -47,5 +47,15 @@ node tools/witness.mjs mutate load.mjs --test node --test   # the own kernel is 
 node ci-verify.mjs                                 # re-derive the sealed facts from the real data
 ```
 
+## Credit
+
+The held-out rule draws on the Guided Entropy Principle (GEP) result that **a stable system can stabilize a wrong
+reference**: a churn pattern can fit the customers it learned from and still be wrong, so the forge keeps it only if it
+holds on customers it never saw.
+
+> Gary W. Floyd, Lumiea Systems Research Division — ThunderStruck Service LLC — "From GEP Stabilization to Dual-Map Ethical Reasoning: A derivation of positive ethical evidence, negative ethical evidence, and non-legal moral reasoning," Derivation v0.2. Open Defensive Prior Art (Creative Commons).
+
+churn-forge and its kernels are AI-Native Solutions' own work. See [NOTICE](NOTICE).
+
 Data: IBM sample *Telco Customer Churn* (public). Built by **Kar · AI-Native Solutions**. Credit for the
 pattern-forge and mint kernels: AI-Native Solutions / Simon Gant.

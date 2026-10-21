@@ -18,6 +18,14 @@
 - ci-verify.mjs re-derives every sealed fact from the real data on GitHub's runner; the live page runs the identical kernels and self-checks the same claims.
 - Forge/breed/mint kernels vendored + pinned from pattern-forge and fallforgemint (see VENDOR.md).
 
+## Credit
+- The held-out rule (a churn pattern can fit the customers it learned from and still be wrong, so it is kept
+  only if it holds on customers it never saw) draws on the Guided Entropy Principle (GEP) result that a stable
+  system can stabilize a wrong reference: Gary W. Floyd, Lumiea Systems Research Division — ThunderStruck Service
+  LLC — "From GEP Stabilization to Dual-Map Ethical Reasoning: A derivation of positive ethical evidence, negative
+  ethical evidence, and non-legal moral reasoning," Derivation v0.2. Open Defensive Prior Art (Creative Commons).
+- churn-forge and its kernels are AI-Native Solutions' own work. Vendored kernels and data: VENDOR.md.
+
 ## Links
 - Live: https://sjgant80-hub.github.io/churn-forge/
 - Source: https://github.com/sjgant80-hub/churn-forge
